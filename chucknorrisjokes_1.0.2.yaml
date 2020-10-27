@@ -1,0 +1,148 @@
+swagger: '2.0'
+info:
+  title: ChuckNorrisJokes
+  x-ibm-name: chucknorrisjokes
+  version: 1.0.0
+host: $(catalog.host)
+schemes:
+  - https
+basePath: /chucknorrisjokes
+produces:
+  - application/json; charset=utf-8
+consumes:
+  - application/json
+security:
+  - ClientSecret: []
+    clientID: []
+securityDefinitions:
+  p3:
+    type: oauth2
+    flow: accessCode
+    x-ibm-oauth-provider: oa3
+    authorizationUrl: 'https://$(catalog.url)/oa3/oauth2/authorize'
+    tokenUrl: 'https://$(catalog.url)/oa3/oauth2/token'
+    scopes:
+      scopa: Sample scope description 1
+  ClientSecret:
+    type: apiKey
+    in: header
+    x-key-type: client_secret
+    name: x-ibm-client-secret
+  clientID:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+x-ibm-configuration:
+  phase: realized
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+  application-authentication:
+    certificate: false
+  assembly:
+    execute:
+      - invoke:
+          version: 2.0.0
+          title: invoke
+          backend-type: detect
+          header-control:
+            type: blacklist
+            values: []
+          parameter-control:
+            type: whitelist
+            values:
+              - param1
+              - param2
+              - cuerpo
+          timeout: 60
+          verb: keep
+          use-http-10: false
+          chunked-uploads: true
+          cache-response: protocol
+          cache-ttl: 900
+          stop-on-error: []
+          target-url: $(target-url)
+    catch: []
+  gateway: datapower-api-gateway
+  type: rest
+  properties:
+    target-url:
+      value: 'http://api.icndb.com/jokes/random'
+      description: The URL of the target service
+      encoded: false
+  catalogs: {}
+  activity-log:
+    enabled: true
+    error-content: header
+    success-content: activity
+paths:
+  /:
+    get:
+      responses:
+        '200':
+          description: success
+          schema:
+            type: string
+      consumes:
+        - application/json
+      produces:
+        - application/json; charset=utf-8
+      parameters:
+        - name: nombre
+          in: query
+          required: false
+          type: string
+    put:
+      responses:
+        '200':
+          description: success
+          schema:
+            type: string
+      consumes: []
+      produces: []
+    post:
+      responses:
+        '200':
+          description: success
+          schema:
+            type: string
+      consumes: []
+      produces: []
+      parameters:
+        - name: cuerpo
+          in: query
+          required: false
+          type: string
+    delete:
+      responses:
+        '200':
+          description: success
+          schema:
+            type: string
+      consumes: []
+      produces: []
+    options:
+      responses:
+        '200':
+          description: success
+          schema:
+            type: string
+      consumes: []
+      produces: []
+    head:
+      responses:
+        '200':
+          description: success
+          schema:
+            type: string
+      consumes: []
+      produces: []
+    patch:
+      responses:
+        '200':
+          description: success
+          schema:
+            type: string
+      consumes: []
+      produces: []
